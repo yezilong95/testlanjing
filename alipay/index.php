@@ -11,7 +11,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-	<title>支付宝手机网站支付接口接口</title>
+	<title>支付宝手机网站支付接口接口未345</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <style>
     *{
@@ -155,22 +155,26 @@
         <form name=alipayment action=alipayapi.php method=post target="_blank">
             <div id="body" style="clear:left">
                 <dl class="content">
-                    <dt>商户订单号：</dt>
+                    <dt>商户订单号
+：</dt>
                     <dd>
                         <input id="WIDout_trade_no" name="WIDout_trade_no" />
                     </dd>
                     <hr class="one_line">
-                    <dt>订单名称：</dt>
+                    <dt>订单名称
+：</dt>
                     <dd>
                         <input id="WIDsubject" name="WIDsubject" />
                     </dd>
                     <hr class="one_line">
-                    <dt>付款金额：</dt>
+                    <dt>付款金额
+：</dt>
                     <dd>
                         <input id="WIDtotal_fee" name="WIDtotal_fee" />
                     </dd>
                     <hr class="one_line">
-                    <dt>商品展示网址：</dt>
+                    <dt>商品展示网址
+：</dt>
                     <dd>
                         <input id="WIDshow_url" name="WIDshow_url" />
                     </dd>
