@@ -1,0 +1,271 @@
+<include file="Public/header"/>
+<link href="/Public/Front/css/Entrystyle.css" rel="stylesheet">
+<div class="row">
+    <div class="col-md-12">
+        <div class="ibox float-e-margins">
+            <!--条件查询-->
+            <div class="ibox-title">
+                <h5>商户进件</h5>
+                <div class="ibox-tools">
+                    <i class="layui-icon" onclick="location.replace(location.href);" title="刷新"
+                       style="cursor:pointer;">ဂ</i>
+                </div>
+            </div>
+            <!--条件查询-->
+            <div class="ibox-content">
+                <form class="layui-form" id="form">
+                    <div class="layui-form-item">
+                        <div class="layui-inline br-div-my">
+                            <div class="layui-input-inline-my">
+                                <span class="layui-span-my"><e class="layui-e-my">*</e>平台商户号</span>
+                                <input type="text" name="userid" autocomplete="off" placeholder="如：10002"
+                                       class="layui-input-my" value="10002">
+                            </div>
+                        </div>
+                        <div class="layui-inline br-div-my">
+                            <div class="layui-input-inline-my">
+                                <span class="layui-span-my"><e class="layui-e-my">*</e>企业/个体户名</span>
+                                <input type="text" name="enterprise_name" autocomplete="off" placeholder="请输入企业/个体户名"
+                                       class="layui-input-my" value="啥大家伙">
+                            </div>
+                        </div>
+                        <div class="layui-inline br-div-my">
+                            <div class="layui-input-inline-my">
+                                <span class="layui-span-my"><e class="layui-e-my">*</e>简称</span>
+                                <input type="text" name="enterprise_abb" autocomplete="off" placeholder="请输入简称"
+                                       class="layui-input-my" value="大家">
+                            </div>
+                        </div>
+                        <div class="layui-inline br-div-my">
+                            <div class="layui-input-inline-my">
+                                <span class="layui-span-my"><e class="layui-e-my">*</e>营业执照编号</span>
+                                <input type="text" name="license_num" autocomplete="off" placeholder="请输入营业执照编号"
+                                       class="layui-input-my" value="91440300MA5EGWWB7T">
+                            </div>
+                        </div>
+                        <div class="layui-inline br-div-my">
+                            <div class="layui-input-inline-my">
+                                <span class="layui-span-my"><e class="layui-e-my">*</e>企业类型</span>
+                                <select name="enterprise_type" class="layui-input-my">
+                                    <option value="企业">企业</option>
+                                    <option value="个体">个体</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline br-div-my">
+                            <div class="layui-input-inline-my">
+                                <span class="layui-span-my"><e class="layui-e-my">*</e>业务模式</span>
+                                <select name="business_model" class="layui-input-my">
+                                    <option value="大商户模式">大商户模式</option>
+                                    <option value="专户">专户</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline br-div-my">
+                            <div class="layui-input-inline-my">
+                                <span class="layui-span-my"><e class="layui-e-my">*</e>企业法人</span>
+                                <input type="text" name="enterprise_person" autocomplete="off" placeholder="请输入企业法人"
+                                       class="layui-input-my" value="叶子龙">
+                            </div>
+                        </div>
+                        <div class="layui-inline br-div-my">
+                            <div class="layui-input-inline-my">
+                                <span class="layui-span-my"><e class="layui-e-my">*</e>证件类型</span>
+                                <select name="certificates_type" class="layui-input-my">
+                                    <option value="身份证">身份证</option>
+                                    <option value="军官正">军官正</option>
+                                    <option value="海外通行证">海外通行证</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline br-div-my">
+                            <div class="layui-input-inline-my">
+                                <span class="layui-span-my"><e class="layui-e-my">*</e>证件号码</span>
+                                <input type="text" name="certificates_num" autocomplete="off" placeholder="请输入证件号码"
+                                       class="layui-input-my" value="632126188787878787">
+                            </div>
+                        </div>
+                        <div class="layui-inline br-div-my">
+                            <div class="layui-input-inline-my">
+                                <span class="layui-span-my"><e class="layui-e-my">*</e>法人手机号码</span>
+                                <input type="text" name="person_tel" autocomplete="off" placeholder="请输入法人手机号码"
+                                       class="layui-input-my" value="15846454545">
+                            </div>
+                        </div>
+                        <div class="layui-inline br-div-my">
+                            <div class="layui-input-inline-my">
+                                <span class="layui-span-my"><e class="layui-e-my">*</e>法人邮箱</span>
+                                <input type="text" name="person_email" autocomplete="off" placeholder="请输入法人邮箱"
+                                       class="layui-input-my" value="731068061@qq.com">
+                            </div>
+                        </div>
+                        <div class="layui-inline br-div-my">
+                            <div class="layui-input-inline-my">
+                                <span class="layui-span-my"><e class="layui-e-my">*</e>经营范围</span>
+                                <input type="text" name="scope_exp" autocomplete="off" placeholder="请输入经营范围"
+                                       class="layui-input-my" value="粉红色的积分哈加到">
+                            </div>
+                        </div>
+                        <div class="layui-inline br-div-my">
+                            <div class="layui-input-inline-my">
+                                <span class="layui-span-my"><e class="layui-e-my">*</e>ICP备案号</span>
+                                <input type="text" name="icp_num" autocomplete="off" placeholder="请输入ICP备案号"
+                                       class="layui-input-my" value="   粤ICP备18062505号-1">
+                            </div>
+                        </div>
+                        <div class="layui-inline br-div-my">
+                            <div class="layui-input-inline-my">
+                                <span class="layui-span-my"><e class="layui-e-my">*</e>网站地址</span>
+                                <input type="text" name="website" autocomplete="off" placeholder="请输入网站地址"
+                                       class="layui-input-my" value="www.lanjcl.com">
+                            </div>
+                        </div>
+                        <div class="layui-inline br-div-my">
+                            <div class="layui-input-inline-my">
+                                <span class="layui-span-my"><e class="layui-e-my">*</e>企业详细地址</span>
+                                <input type="text" name="business_address" autocomplete="off" placeholder="请输入企业所在详细地址"
+                                       class="layui-input-my" value="带积分哈京东方">
+                            </div>
+                        </div>
+                        <hr class="hr-my">
+                        <div class="layui-inline br-div-my">
+                            <div class="layui-input-inline-my">
+                                <span class="layui-span-my"><e class="layui-e-my">*</e>开户行</span>
+                                <select name="opening_bank" class="layui-input-my">
+                                    <option value="工商银行">工商银行</option>
+                                    <option value="建设银行" selected="selected">建设银行</option>
+                                    <option value="农业银行">农业银行</option>
+                                    <option value="招商银行">招商银行</option>
+                                    <option value="交通银行">交通银行</option>
+                                    <option value="中国银行">中国银行</option>
+                                    <option value="光大银行">光大银行</option>
+                                    <option value="民生银行">民生银行</option>
+                                    <option value="兴业银行">兴业银行</option>
+                                    <option value="中信银行">中信银行</option>
+                                    <option value="广发银行">广发银行</option>
+                                    <option value="浦发银行">浦发银行</option>
+                                    <option value="平安银行">平安银行</option>
+                                    <option value="华夏银行">华夏银行</option>
+                                    <option value="中国邮储银行">中国邮储银行</option>
+                                    <option value="上海银行">上海银行</option>
+                                    <option value="南京银行">南京银行</option>
+                                    <option value="上海农商行">上海农商行</option>
+                                    <option value="北京银行">北京银行</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline br-div-my">
+                            <div class="layui-input-inline-my">
+                                <span class="layui-span-my"><e class="layui-e-my">*</e>开户支行</span>
+                                <input type="text" name="bank_zhi" autocomplete="off" placeholder="请输入开户支行"
+                                       class="layui-input-my" value="常州支行">
+                            </div>
+                        </div>
+                        <div class="layui-inline br-div-my">
+                            <div class="layui-input-inline-my">
+                                <span class="layui-span-my"><e class="layui-e-my">*</e>户主姓名</span>
+                                <input type="text" name="account_person" autocomplete="off" placeholder="请输入户主姓名"
+                                       class="layui-input-my" value="">
+                            </div>
+                        </div>
+                        <div class="layui-inline br-div-my">
+                            <div class="layui-input-inline-my">
+                                <span class="layui-span-my"><e class="layui-e-my">*</e>卡号</span>
+                                <input type="text" name="bank_num" autocomplete="off" placeholder="请输入卡号"
+                                       class="layui-input-my" value="7217001269998989898">
+                            </div>
+                        </div>
+                        <div class="layui-inline br-div-my">
+                            <div class="layui-input-inline-my">
+                                <span class="layui-span-my"><e class="layui-e-my">*</e>银行预留手机号</span>
+                                <input type="text" name="account_tel" autocomplete="off" placeholder="请输入银行预留手机号"
+                                       class="layui-input-my" value="15656565656">
+                            </div>
+                        </div>
+
+
+                        <div class="layui-inline br-div-my">
+                            <div class="layui-input-inline-my" style="text-align: center;">
+                                <button type="button" onclick="submitPayment();" class="layui-btn">提交</button>
+                            </div>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<div id="mask" style="width: 100%;height: 100%;background: rgba(0,0,0,0.5);position: fixed;top: 10px;left: 0;display: none;z-index: 198910145;">
+    <div style="height:40px ; width: 130px;background: #fff;border-radius: 6px;margin: 10px auto;line-height: 40px;text-align: center">
+        <img src="/web/images/top-alert-icon-doing.gif" alt="">
+        <span style="margin-left: 10px">请稍后...</span>
+    </div>
+</div>
+<script src="/Public/Front/js/jquery-3-1.min.js"></script>
+<script src="/Public/Front/js/bootstrap.min.js"></script>
+<script src="/Public/Front/js/plugins/peity/jquery.peity.min.js"></script>
+<script src="/Public/Front/js/content.js"></script>
+<script src="/Public/Front/js/plugins/layui/layui.js" charset="utf-8"></script>
+<script src="/Public/Front/js/x-layui.js" charset="utf-8"></script>
+
+<script>
+    layui.use(['laydate', 'laypage', 'layer', 'table', 'form'], function() {
+        var laydate = layui.laydate //日期
+            , laypage = layui.laypage //分页
+            ,layer = layui.layer //弹层
+            ,form = layui.form //表单
+            , table = layui.table; //表格
+        //日期时间范围
+        laydate.render({
+            elem: '#createtime'
+            , type: 'datetime'
+            ,theme: 'molv'
+            , range: '|'
+        });
+        //日期时间范围
+        laydate.render({
+            elem: '#successtime'
+            , type: 'datetime'
+            ,theme: 'molv'
+            , range: '|'
+        });
+
+    });
+
+
+    function submitPayment() {
+
+        layer.confirm('确认要提交吗？',function() {
+            $.ajax({
+                url: "<{:U('Admin/Entry/EntryAdd')}>",
+                type: 'post',
+                data: $("#form").serialize(),
+                datatype:'json',
+                beforeSend: function(){
+                    $('#mask').show();
+                },
+                success: function (res) {
+                    console.log(res);
+                    if (res.status!='error') {
+                        layer.msg('已成功提交!', {icon: 1, time: 1000},function () {
+                            location.replace(location.href);
+                        });
+                    }else{
+                        layer.msg(res.msg, {icon: 2, time: 1000},function () {
+                            location.replace(location.href);
+                        });
+                    }
+                },
+                complete: function () {
+                    $('#mask').hide();
+                }
+            });
+        });
+    }
+
+
+
+
+</script>
+</body>
+</html>

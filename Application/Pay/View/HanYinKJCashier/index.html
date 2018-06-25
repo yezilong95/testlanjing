@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+<title>银联快捷支付</title>
+<link rel="stylesheet" href="/web/css/CashierStyle.css">
+<style>
+	.elements{
+		display: none;
+	}
+</style>
+<script src="/web/js/jquery.min.js"></script>
+</head>
+<body>
+<header>
+	<article>
+		<div class="mobile">
+			<img src="/web/images/ylkjlogo.png" />
+		</div>
+		<div>银联快捷</div>
+	</article>
+</header>
+<form action="<{:U('Pay/HanYinKJ/PayAgain')}>" id="form" method="post">
+	<input type="hidden" id="flag" name="flag" value="0">
+	<main class="index-main" id="vuevm">
+		<p class="mobile tit">订单信息</p>
+		<div class="order-inf">
+			<hgroup class="pc">订单信息</hgroup>
+			<article>
+				<label for="">订单号</label>
+				<input style="width: auto;" type="text" readonly name="pay_orderid" value="<{$out_trade_id}>" />
+			</article>
+			<article>
+				<label for="">订单金额</label>
+				<input type="text" readonly name="pay_amount" value="<{$pay_amount}> 元" />
+			</article>
+			<input type="hidden" name="arraystr" value="<{$arraystr}>">
+			<input type="hidden" name="ret" value="<{$return}>">
+
+		</div>
+		<p class="mobile tit">银行信息</p>
+		<div class="bank-inf">
+			<div>
+				<hgroup class="pc">银行信息</hgroup>
+				<!--<article>
+                    <label for="">银行卡类型</label>
+                    <select name="" id="cardType" >
+                        <option value="0">借记卡</option>
+                        <option value="1">信用卡</option>
+                    </select>
+                </article>-->
+				<!--<article>
+					<label for="">银行名称</label>
+					<select name="tranChannel" id="tranChannel">
+						&lt;!&ndash;<option :value="card.val" v-for="card in cards">{{card.txt}}</option>&ndash;&gt;
+						<option value="102">工商银行</option>
+						<option value="307">平安银行</option>
+						<option value="306">广发银行</option>
+						<option value="441">广州市商业银行</option>
+						<option value="310">浦发银行</option>
+						<option value="313">北京银行</option>
+					</select>
+				</article>-->
+				<article>
+					<label for="">银行卡号</label>
+					<input type="tel" placeholder="16-19位数字" id="bankCardNo" name="bankCardNo" value="">
+				</article>
+				<!--<article>
+					<label for="">开户人</label>
+					<input type="text" placeholder="开户人姓名" id="userName" name="userName" value="">
+				</article>
+				<article>
+					<label for="">身份证号</label>
+					<input type="text" placeholder="身份证" id="idNo" value="" name="idNo" >
+				</article>
+				<article>
+					<label for="">手机号</label>
+					<input type="text" placeholder="银行卡绑定的手机号" value="" id="phone" name="phone">
+				</article>-->
+			</div>
+			<div class="xyinfo">
+				<article >
+					<label for="">CVV</label>
+					<input type="text" placeholder="信用卡背面三位数字" id="cvv">
+				</article>
+				<article>
+					<label for="">到期时间</label>
+					<input type="text" placeholder="MM/YY" id="overdue">
+				</article>
+			</div>
+		</div>
+		<footer>
+			<button id="submit">提交</button>
+
+		</footer>
+	</main>
+</form>
+
+
+<script src="/web/js/vue2.0.js"></script>
+<script src="/web/js/vue.js"></script>
+<script src="/web/js/myjs.js"></script>
+<script>
+	$("#submit").on("click",function(){
+        if(!/^([1-9]{1})(\d{15}|\d{18})$/gi.test($.trim($("#bankCardNo").val()))){
+            alert("请填写正确的银行卡号！");
+            $("#bankCardNo").focus();
+            return false;
+        }else{
+            $('#form').submit();
+        }
+
+	})
+</script>
+</body>
+</html>

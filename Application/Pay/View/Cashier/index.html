@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+<title>银联快捷支付</title>
+<link rel="stylesheet" href="/web/css/CashierStyle.css">
+<script src="/web/js/jquery.min.js"></script>
+</head>
+<body>
+<header>
+	<article>
+		<div class="mobile">
+			<img src="/web/images/ylkjlogo.png" />
+		</div>
+		<div>银联快捷</div>
+	</article>
+</header>
+<form>
+    <input type="hidden" name="orderId" id="orderId" value="<{$orderId}>">
+	<main class="index-main" id="vuevm">
+		<p class="mobile tit">订单信息</p>
+		<div class="order-inf">
+			<hgroup class="pc">订单信息</hgroup>
+			<article>
+				<label for="">订单号</label>
+				<input type="text" readonly value="<{$outTradeId}>" name="outTradeId" id="outTradeId" />
+			</article>
+			<article>
+				<label for="">订单金额</label>
+				<input type="text" readonly name="amount" id="amount" value="<{$amount}>" /> 元
+			</article>
+		</div>
+		<p class="mobile tit">银行信息</p>
+		<div class="bank-inf">
+			<div>
+				<hgroup class="pc">银行信息</hgroup>
+				<article>
+					<label>银行卡号</label>
+					<input type="tel" placeholder="16-19位数字" id="bankCardNo" value="">
+                    <input type="button" value="下一步" id="nextStep">
+				</article>
+                <div id="info1" style="display: none">
+                    <article>
+                        <label>开户人</label>
+                        <input type="text" placeholder="开户人姓名" id="fullname" value="">
+                    </article>
+                    <article>
+                        <label>身份证号</label>
+                        <input type="text" placeholder="身份证号" id="idCardNo" value="">
+                    </article>
+                    <article>
+                        <label>手机号</label>
+                        <input type="text" placeholder="银行卡绑定的手机号" id="mobile" value="">
+                    </article>
+                </div>
+                <div id="info2" style="display: none">
+                    <article>
+                        <label>验证码</label>
+                        <input type="text" placeholder="短信验证码" id="verifyCode">
+                        <input type="button" value="获取验证码" id="codebtn">
+                    </article>
+                </div>
+			</div>
+		</div>
+		<footer>
+			<button id="submit" style="display: none">提交</button>
+		</footer>
+	</main>
+</form>
+
+<div style="display: none" id="prePayUrl"></div>
+<div style="display: none" id="isBind"></div>
+<div style="display: none" id="sendCodeTime">0</div>
+
+<script src="/web/js/CashierJs.js"></script>
+<script>
+    //下一步
+    $('#nextStep').on('click', function(){
+        if(!/^(\d{16}|\d{19})$/gi.test($.trim($("#bankCardNo").val()))){
+            alert("请填写正确的银行卡号！");
+            $("#bankCardNo").focus();
+            return false;
+        }
+
+        var obj = $(this);
+        obj.attr('disabled', true);
+        obj.val("下一步中...");
+
+        var submitData = {
+            bankCardNo : $('#bankCardNo').val(),
+            orderId : $('#orderId').val()
+        };
+        var url = "<{:U('Pay/YinShengBaoKJ/isBindBankCard')}>";
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: submitData,
+            dataType: "json",
+            /*beforeSend : function(){
+                document.getElementById("mask").style.display = "flex";
+            },*/
+            success: function(resp){
+                obj.attr('disabled', false);
+                obj.val("下一步");
+                if (resp.code == '00'){
+                    $('#nextStep').hide();
+                    var prePayUrl = '';
+                    if(!resp.data.isBind){
+                        $('#info1').show();
+                        prePayUrl = "<{:U('Pay/YinShengBaoKJ/prePayUnbindCard')}>";
+                    }else{
+                        prePayUrl = "<{:U('Pay/YinShengBaoKJ/prePayBindCard')}>";
+                    }
+                    $('#info2').show();
+                    $('#submit').show();
+                    $('#prePayUrl').html(prePayUrl);
+                    $('#isBind').html(resp.data.isBind);
+                }else{
+                    alert(resp.msg);
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){ //上传失败
+                obj.attr('disabled', false);
+                obj.val("下一步");
+                alert("status:"+XMLHttpRequest.status);
+            }
+        });
+    });
+
+    //发送短信: 提交首次预支付, 如果已绑卡提交再次预支付，如果已提交预支付则重发短信验证码
+	$("#codebtn").on("click",function(){
+	    //重发短信验证码
+	    if($('#sendCodeTime') >= 1){
+
+        }
+
+        //提交预支付
+	    if ($('#isBind').html() == 1) { //已绑定卡
+            if(!/^(\d{16}|\d{19})$/gi.test($.trim($("#bankCardNo").val()))){
+                alert("请填写正确的银行卡号");
+                $("#bankCardNo").focus();
+                return false;
+            }
+            var submitData = {
+                orderId : $('#orderId').val(),
+                outTradeId : $('#outTradeId').val(),
+                bankCardNo : $('#bankCardNo').val()
+            };
+        }else{ //未绑定卡
+            if (!verification_fun()) {
+                return false;
+            }
+            var submitData = {
+                orderId : $('#orderId').val(),
+                outTradeId : $('#outTradeId').val(),
+                bankCardNo : $('#bankCardNo').val(),
+                fullname : $('#fullname').val(),
+                idCardNo : $('#idCardNo').val(),
+                mobile : $('#mobile').val()
+            };
+		}
+
+        settime();
+        var url = $('#prePayUrl').html();
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: submitData,
+            dataType: "json",
+            /*beforeSend : function(){
+                document.getElementById("mask").style.display = "flex";
+            },*/
+            success: function(resp){
+                if (resp.code == '00'){
+                    $('#sendCodeTime').html($('#sendCodeTime').html() + 1);
+                    alert(resp.msg);
+                }else{
+                    countdown = 0;
+                    alert(resp.msg);
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){ //上传失败
+                alert("status:"+XMLHttpRequest.status);
+                countdown = 0;
+            }
+        });
+	});
+    var countdown = 99;
+    function settime() { //发送验证码倒计时
+        var obj = $('#codebtn');
+        if (countdown == 0) {
+            obj.attr('disabled', false);
+            obj.val("获取验证码");
+            countdown = 99;
+            return;
+        } else {
+            obj.attr('disabled', true);
+            obj.val("重新发送(" + countdown + ")");
+            countdown--;
+        }
+        setTimeout(function() {settime(obj) }, 1000);
+    }
+
+    //重发短信验证码
+    function sendVerifyCode() {
+        var submitData = {
+            orderId : $('#orderId').val(),
+            outTradeId : $('#outTradeId').val(),
+        };
+
+        settime();
+        var url = "<{:U('Pay/YinShengBaoKJ/sendVerifyCode')}>";
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: submitData,
+            dataType: "json",
+            /*beforeSend : function(){
+                document.getElementById("mask").style.display = "flex";
+            },*/
+            success: function(resp){
+                if (resp.code == '99'){
+                    $('#sendCodeTime').html($('#sendCodeTime').html() + 1);
+                    alert(resp.msg);
+                }else{
+                    countdown = 0;
+                    alert(resp.msg);
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){ //上传失败
+                alert("status:"+XMLHttpRequest.status);
+                countdown = 0;
+            }
+        });
+    }
+
+	$("#submit").on("click", function(e){
+	    e.preventDefault();
+
+        if ($('#isBind').html() == 1) { //已绑定卡
+            if(!/^(\d{16}|\d{19})$/gi.test($.trim($("#bankCardNo").val()))){
+                alert("请填写正确的银行卡号");
+                $("#bankCardNo").focus();
+                return false;
+            }
+        }else{ //未绑定卡
+            if(!verification_fun()) {
+                return false;
+            }
+        }
+
+		if($.trim($("#verifyCode").val()).length < 6){
+			alert("请填写正确的验证码！");
+			$("#verifyCode").focus();
+			return false;
+    	}
+
+        var obj = $(this);
+        obj.attr('disabled', true);
+        obj.html("提交中...");
+
+        var submitData = {
+            orderId : $('#orderId').val(),
+            outTradeId : $('#outTradeId').val(),
+            verifyCode: $('#verifyCode').val()
+        };
+        var url = "<{:U('Pay/YinShengBaoKJ/confirmPay')}>";
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: submitData,
+            dataType: "json",
+            /*beforeSend : function(){
+                document.getElementById("mask").style.display = "flex";
+            },*/
+            success: function(resp){
+                obj.attr('disabled', false);
+                if (resp.code == '00'){
+                    window.location.href = resp.data.callbackurl; //页面回调
+                }else{
+                    alert(resp.msg);
+                    obj.html("提交");
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){ //上传失败
+                obj.attr('disabled', false);
+                obj.html("提交");
+                alert("status:"+XMLHttpRequest.status);
+            }
+        });
+	});
+</script>
+</body>
+</html>

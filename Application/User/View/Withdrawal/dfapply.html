@@ -1,0 +1,153 @@
+<include file="Public/header"/>
+<div class="row">
+    <div class="col-md-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>代付申请</h5>
+            </div>
+            <div class="ibox-content">
+                <blockquote class="layui-elem-quote">
+                    <span class="text-danger">可提现：<{$info['balance']+$info['ensurebalance']}> 元</span>
+                    <span style="margin:0 30px;" class="text-muted">冻结：<{$info['blockedbalance']}> 元</span>
+                    <span class="text-warning">结算：<if condition="$tkconfig[t1zt] eq 1">T+1<elseif
+                            condition="$tkconfig[t1zt] eq 0"/>T+0</if></span>
+                </blockquote>
+                <div class="layui-inline">
+                <button type="button" class="layui-btn layui-btn-danger" onclick="addRow()"><span
+                        class="glyphicon glyphicon-plus"></span> 新增
+                </button>
+                </div>
+                <form class="layui-form" id="df_form">
+                <table class="layui-table">
+                        <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>结算金额</th>
+                            <th>银行卡</th>
+                            <volist name="extend_fields" k="key" id="vo">
+                            <th><{$vo}></th>
+                            </volist>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody id="container">
+                            <tr>
+                                <td>1</td>
+                                <td>
+                                    <input type="text" name="item[1][tkmoney]" lay-verify=""  autocomplete="off"
+                                           class="layui-input df_item" style="width:150px">
+                                </td>
+                                <td>
+                                    <select name="item[1][bank]" class="layui-select df_item">
+                                    <option value=""></option>
+                                    <volist class="layui-input" name="bankcards" id="b">
+                                        <option value="<{$b.id}>"><{$b.bankname}>(<{$b.cardnumber|substr=###,'-4'}>)<{$b.alias}></option>
+                                    </volist>
+                                    </select>
+                                </td>
+                                <volist name="extend_fields" k="key" id="vo">
+                                <td><input type="text" name="item[1][extend][<{$key}>]" lay-verify=""  autocomplete="off"
+                                           class="layui-input df_item" style="width:150px"></td>
+                                </volist>
+                                <td>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">支付密码：</label>
+                        <div class="layui-input-inline">
+                            <input type="password" name="password" lay-verify="pass" placeholder="请输入支付密码" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+
+                    <include file="Public/send"/>
+
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit="" lay-filter="save">提交申请</button>
+                        </div>
+                    </div>
+                </form>
+        </div>
+    </div>
+</div>
+<include file="Public/footer"/>
+<script>
+    var rowCount=1;
+    //添加行
+    function addRow(){
+        rowCount++;
+        var newRow='<tr id="option'+rowCount+'">' + '<td>'+rowCount+'</td> <td>'+
+            '<input type="text" name="item['+rowCount+'][tkmoney]" lay-verify=""  autocomplete="off" class="layui-input df_item" style="width:150px"></td><td>'+ '<select name="item['+rowCount+'][bank]" class="layui-select df_item">'+
+            '<option value=""></option>';
+            <volist class="layui-input" name="bankcards" id="b">
+            newRow+='<option value="<{$b.id}>"><{$b.bankname}>(<{$b.cardnumber|substr=###,'-4'}>)<{$b.alias}></option>';
+             </volist>
+        newRow+='</select></td>';
+        <volist name="extend_fields" k="key" id="vo">
+            newRow+='<td><input type="text" name="item['+rowCount+'][extend][<{$key}>]" lay-verify=""  autocomplete="off" class="layui-input df_item" style="width:150px"></td>';
+            </volist>
+        newRow+='<td>';
+        newRow+=' <button class="layui-btn layui-btn-small"  onclick="$(this).parent().parent().remove();">删除</button></td></tr>';
+        $('#container').append(newRow);
+        layui.form.render();
+    }
+    var issubmit=false;
+    layui.use(['form', 'layer','element'], function(){
+        var layer = layui.layer //弹层
+            ,form = layui.form
+            ,element = layui.element; //元素操作
+
+        //监听提交
+        form.on('submit(save)', function(data){
+            layer.confirm('确定发起代付申请？', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+                var flag = false;
+                $('.df_item').each(function(){
+                    if($(this).val() == '') {
+                        flag = true;
+                        return false;
+                    }
+                });
+                if(flag == true) {
+                    layer.alert('表格存在空值，请检查后再提交！');
+                    return false;
+                }
+                $.ajax({
+                    url:"<{:U('Withdrawal/dfsave')}>",
+                    type:"post",
+                    data:$('#df_form').serialize(),
+                    success:function(res){
+                        if(res.status){
+                            layer.alert("申请成功", {icon: 6},function () {
+                                location.reload();
+                                var index = parent.layer.getFrameIndex(window.name);
+                                parent.layer.close(index);
+                            });
+                        }else{
+                           if(res.info){
+                               layer.alert(res.info, {icon: 5},function (index) {
+                                   layer.close(index);
+                               });
+                           }else{
+                               layer.alert("申请失败,请稍后重试", {icon: 5},function (index) {
+                                   layer.close(index);
+                               });
+                           }
+
+                        }
+                    }
+                });
+            }, function(){
+
+            });
+
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

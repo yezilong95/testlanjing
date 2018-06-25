@@ -1,0 +1,36 @@
+<include file="Public/header"/>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>登录记录</h5>
+        </div>
+        <div class="ibox-content">
+               <table class="layui-table" lay-skin="line">
+                   <thead>
+                   <tr>
+                       <th></th>
+                       <th>登陆时间</th>
+                       <th>地点</th>
+                       <th>IP</th>
+                   </tr>
+                   </thead>
+                   <tbody>
+                   <volist name="list" id="vo">
+                   <tr>
+                       <td><{$key+1}></td>
+                       <td><{$vo.logindatetime}></td>
+                       <td><{$vo.loginaddress}></td>
+                       <td><{$vo.loginip}></td>
+                   </tr>
+                   </volist>
+                   </tbody>
+               </table>
+		 <div class="text-center"><{$page}></div>
+      </div>
+    </div>
+  </div>
+</div>
+ <include file="Public/footer"/>
+</body>
+</html>

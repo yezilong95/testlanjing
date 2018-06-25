@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>京东钱包</title>
+</head>
+<link rel="stylesheet" href="/Public/css/base.css" />
+<script type="text/javascript">
+    var w=screen.width;
+    if(w<1024)document.write('<link rel="stylesheet" type="text/css" href="/Public/css/wap.css"/>');
+    else document.write('<link rel="stylesheet" type="text/css" href="/Public/css/pc_style.css"/>')
+</script>
+<body>
+<header class="w">
+    <div class="logo f25 pt15 pb15">收银台</div>
+</header>
+<section class="w">
+    <div class="y_box">
+        <div class="f15 fb pt30 pb30 ohidden zhif">
+            <span class="fl">订单提交成功，请您尽快付款！</span>
+            <div class="fr money">应付金额：<b class="box_b"><{$money}></b>元&nbsp;
+                <span class=" fn f13">订单号：<{$params.out_trade_id}></span>
+            </div>
+        </div>
+        <div class="erimg pr">
+            <div class=" erw"><img id="ewmimg" src="<{$imgurl}>"></div>
+            <div class=" words">请使用京东扫一扫，扫描二维码支付</div>
+            <div class="img_img w400 pa">
+                <img src="/Public/images/logo-JDpay.jpg" alt="银联扫码示意图" />
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--收银台-->
+<script src="/Public/Front/js/jquery.min.js"></script>
+<script src="/Public/Front/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var r = window.setInterval(function () {
+            $.ajax({
+                type: 'POST',
+                url: '<{:U("Pay/checkstatus")}>',
+                data: "orderid=<{$orderid}>",
+                dataType: 'json',
+                success: function (str) {
+                    if (str.status == "ok") {
+                        $("#ewmimg").attr("src", "/Public/images/paysuccess.jpg");
+                        window.clearInterval(r);
+                        window.location.href = str.callback;
+                    }
+                }
+            });
+        }, 2000);
+    });
+</script>
+</body>
+</html>

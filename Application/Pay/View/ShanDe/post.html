@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="renderer" content="webkit"/>
+    <title>Insert title here</title>
+    <script type="text/javascript" src="/cert/ShanDe/paymentjs.js"></script>
+    <script type="text/javascript" src="/cert/ShanDe/jquery-1.7.2.min.js"></script>
+</head>
+<body>
+
+
+<div style="display: none">
+    <p id="credential"><{$credential}></p>
+</div>
+</body>
+<script>
+    function wap_pay() {
+        var responseText = $("#credential").text();
+        console.log(responseText);
+        paymentjs.createPayment(responseText, function (result, err) {
+            console.log(result);
+            console.log(err.msg);
+            console.log(err.extra);
+        });
+    }
+</script>
+<script>
+    window.onload = function () {
+        wap_pay();
+    };
+</script>
+</html>
